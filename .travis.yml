@@ -5,7 +5,3 @@ node_js:
 before_script:
   - npm install -g grunt-cli
   - chmod 600 config/keys/*
-  - ifconfig -a
-  - ping -c 2 127.0.0.1
-  - ps -ef | grep sshd
-  - cat /etc/openssh/sshd_config
