@@ -8,3 +8,4 @@ before_script:
   - ifconfig -a
   - ping -c 2 127.0.0.1
   - ps -ef | grep sshd
+  - cat /etc/sshd_config
