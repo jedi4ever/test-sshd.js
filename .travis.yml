@@ -5,3 +5,4 @@ node_js:
 before_script:
   - npm install -g grunt-cli
   - chmod 600 config/keys/*
+  - ifconfig -a
