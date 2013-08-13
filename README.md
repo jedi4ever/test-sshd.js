@@ -3,7 +3,7 @@
 
 > Because there is nothing like the real thing
 
-Way too many code that uses ssh isn't tested because mocking and stubbing an ssh servers is hard.
+Way too many code that uses ssh isn't tested because mocking and stubbing sshd servers is hard.
 
 # How
 It starts a sshd with the correct arguments so that:
