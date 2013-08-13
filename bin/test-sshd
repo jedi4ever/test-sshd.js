@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+var TestSshd = require('../lib/test-sshd');
+var sshd = new TestSshd( {port:4000});
+
+sshd.start();
