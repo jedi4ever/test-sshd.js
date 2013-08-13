@@ -7,4 +7,4 @@ before_script:
   - chmod 600 config/keys/*
   - ifconfig -a
   - ping -c 2 127.0.0.1
-  - cat /etc/sshd/sshd_config
+  - ps -ef | grep sshd
