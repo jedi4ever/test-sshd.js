@@ -11,7 +11,8 @@ It starts a sshd with the correct arguments so that:
 - you can login as the current user (process.env.user)
 - using the test key provided (in config/keys/id_rsa)
 - on a port you specify
-- if login succeeds it uses `ForceCommand` to echo the command in `$SSH_ORIGINAL_COMMAND`
+- (mode: echo ) if login succeeds it uses `ForceCommand` to echo the command in `$SSH_ORIGINAL_COMMAND`
+- (mode: exec ) if login succeeds it uses executes the command
 - it does NOT do password authentication (yet)
 
 # Usage
@@ -59,7 +60,7 @@ It starts a sshd with the correct arguments so that:
 
 ## Options
 - `port`: **integer** defdults to 4000
-- `mode`: **string** default to echo (currently only this mode is supported)
+- `mode`: **string** default to `echo` (other options are `exec`)
 
 ## Events
 - `ready`: when the sshd is succesfully listening

@@ -90,6 +90,59 @@ describe('TestSshd', function() {
 
   });
 
+  it('run of a command should work', function(done) {
+    var command = 'whoami';
+    sshd = new TestSshd({port: port, mode: 'exec'});
+    var connectParams = sshd.connectParams();
+
+    var c = new Connection();
+    c.on('ready',function() {
+      c.exec(command,{}, function(err, stream) {
+
+        if (err) {
+          return done(err);
+        }
+
+        stream.on('data', function(data, extended) {
+          var output = data + '';
+          expect(output).to.be.string(process.env.USER);
+          sshd.stop();
+          return done();
+        });
+
+        stream.on('exit', function(code, signal) {
+          if (code !== 0) {
+            return done(new Error('wrong exit code: '+ code));
+          }
+        });
+
+      });
+
+    });
+
+    c.on('error',function(err) {
+      return done(err);
+    });
+
+    sshd.on('ready', function() {
+      c.connect(connectParams);
+    });
+    sshd.on('error', function(err) {
+      return done(err);
+    });
+    sshd.start();
+
+  });
+
+  it('error on incorrect mode should work', function(done) {
+    try {
+    sshd = new TestSshd({port: port, mode: 'exec2'});
+    } catch (ex) {
+      done();
+    }
+  });
+
+
   it('should terminate correctly', function(done) {
 
     sshd = new TestSshd({port: port});
