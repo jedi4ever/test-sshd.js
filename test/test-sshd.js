@@ -90,4 +90,14 @@ describe('TestSshd', function() {
 
   });
 
+  it('should terminate correctly', function(done) {
+
+    sshd = new TestSshd({port: port});
+    sshd.on('ready', function() {
+        sshd.stop();
+        done();
+    });
+    sshd.start();
+  });
+
 });
