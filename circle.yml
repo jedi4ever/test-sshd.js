@@ -1,3 +1,0 @@
-dependencies:
-  pre:
-    - chmod 600 config/keys/*
