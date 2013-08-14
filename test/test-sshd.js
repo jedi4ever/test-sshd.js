@@ -136,7 +136,7 @@ describe('TestSshd', function() {
 
   it('error on incorrect mode should work', function(done) {
     try {
-    sshd = new TestSshd({port: port, mode: 'exec2'});
+      sshd = new TestSshd({port: port, mode: 'exec2'});
     } catch (ex) {
       done();
     }
