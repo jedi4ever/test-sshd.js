@@ -21,6 +21,11 @@ var privateKey = TestSshd.privateKey;
 
 describe('TestSshd', function() {
 
+  afterEach(function(done) {
+    sshd.stop();
+    done();
+  });
+
   it('login should work', function(done) {
 
     sshd = new TestSshd({port: port});
@@ -46,9 +51,9 @@ describe('TestSshd', function() {
 
   });
 
-  it('echo of a command should work', function(done) {
+  it('in echo mode it should echo of a command should work', function(done) {
     var command = 'uptime';
-    sshd = new TestSshd({port: port});
+    sshd = new TestSshd({port: port, mode: 'echo'});
     var connectParams = sshd.connectParams();
 
     var c = new Connection();
@@ -68,6 +73,57 @@ describe('TestSshd', function() {
 
         stream.on('exit', function(code, signal) {
           if (code !== 0) {
+            return done(new Error('wrong exit code: '+ code));
+          }
+        });
+
+      });
+
+    });
+
+    c.on('error',function(err) {
+      return done(err);
+    });
+
+    sshd.on('ready', function() {
+      c.connect(connectParams);
+    });
+    sshd.on('error', function(err) {
+      return done(err);
+    });
+    sshd.start();
+
+  });
+
+  it('in expect mode it should echo of a command should work', function(done) {
+    var command = 'uptime';
+    var expectations = { 'uptime': { stdout: 'uptime' , stderr: '' , code: 0 }} ;
+
+    var expectedStdout = expectations[command].stdout;
+    var expectedCode = expectations[command].code;
+
+    sshd = new TestSshd({port: port, mode: 'expect' , expectations: expectations });
+
+    var connectParams = sshd.connectParams();
+
+    var c = new Connection();
+    c.on('ready',function() {
+      c.exec(command,{}, function(err, stream) {
+
+        if (err) {
+          sshd.stop();
+          return done(err);
+        }
+
+        stream.on('data', function(data, extended) {
+          var output = data + '';
+          expect(output).to.equal(expectedStdout);
+          sshd.stop();
+          return done();
+        });
+
+        stream.on('exit', function(code, signal) {
+          if (code !==  expectedCode) {
             return done(new Error('wrong exit code: '+ code));
           }
         });
