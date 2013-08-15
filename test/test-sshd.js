@@ -147,10 +147,46 @@ describe('TestSshd', function() {
 
     sshd = new TestSshd({port: port});
     sshd.on('ready', function() {
-        sshd.stop();
-        done();
+      sshd.stop();
+      done();
     });
     sshd.start();
+  });
+
+  it('in transfer mode sftp listing the home dir should work', function(done) {
+    sshd = new TestSshd({port: port, mode: 'transfer'});
+    var homeDir = process.env.HOME;
+    var connectParams = sshd.connectParams();
+
+    var c = new Connection();
+    c.on('ready',function() {
+      c.sftp(function(err, sftp) {
+        if (err) {
+          return done(err);
+        }
+        sftp.opendir(homeDir, function readdir(err, handle) {
+          if (err) {
+            return done(err);
+          }
+          sshd.stop();
+          return done();
+        });
+
+      });
+    });
+
+    c.on('error',function(err) {
+      return done(err);
+    });
+
+    sshd.on('ready', function() {
+      c.connect(connectParams);
+    });
+    sshd.on('error', function(err) {
+      return done(err);
+    });
+    sshd.start();
+
   });
 
 });

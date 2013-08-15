@@ -13,6 +13,7 @@ It starts a sshd with the correct arguments so that:
 - on a port you specify
 - (mode: echo ) if login succeeds it uses `ForceCommand` to echo the command in `$SSH_ORIGINAL_COMMAND`
 - (mode: exec ) if login succeeds it uses executes the command
+- (mode: transfer ) if login succeeds it allows for sftp
 - it does NOT do password authentication (yet)
 
 # Usage
@@ -60,7 +61,7 @@ It starts a sshd with the correct arguments so that:
 
 ## Options
 - `port`: **integer** defdults to 4000
-- `mode`: **string** default to `echo` (other options are `exec`)
+- `mode`: **string** default to `echo` (other options are `exec`, `transfer`)
 
 ## Events
 - `ready`: when the sshd is succesfully listening
