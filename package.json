@@ -1,6 +1,6 @@
 {
   "name": "test-sshd",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Patrick Debois <patrick.debois@jedi.be>",
   "private": false,
   "scripts": {
